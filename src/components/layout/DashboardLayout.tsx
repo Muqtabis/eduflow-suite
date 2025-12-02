@@ -4,83 +4,93 @@ import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import {
-  GraduationCap,
-  LayoutDashboard,
-  Users,
-  UserCog,
-  DollarSign,
-  Bell,
-  Calendar,
-  ClipboardCheck,
-  BookOpen,
-  FileText,
-  User,
-  BarChart3,
-  Clock,
-  LogOut,
-  Menu,
-  X,
-} from 'lucide-react';
-
+import { GraduationCap, LayoutDashboard, Users, UserCog, DollarSign, Bell, Calendar, ClipboardCheck, BookOpen, FileText, User, BarChart3, Clock, LogOut, Menu, X } from 'lucide-react';
 interface DashboardLayoutProps {
   children: ReactNode;
 }
-
-const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  const { role, logout, userName } = useAuth();
+const DashboardLayout = ({
+  children
+}: DashboardLayoutProps) => {
+  const {
+    role,
+    logout,
+    userName
+  } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const handleLogout = () => {
     logout();
     navigate('/');
   };
-
-  const adminNav = [
-    { icon: LayoutDashboard, label: 'Overview', path: '/dashboard' },
-    { icon: Users, label: 'Students', path: '/dashboard/students' },
-    { icon: UserCog, label: 'Teachers', path: '/dashboard/teachers' },
-    { icon: DollarSign, label: 'Finances', path: '/dashboard/finances' },
-    { icon: Bell, label: 'Announcements', path: '/dashboard/announcements' },
-  ];
-
-  const teacherNav = [
-    { icon: LayoutDashboard, label: 'Overview', path: '/dashboard' },
-    { icon: Calendar, label: 'My Schedule', path: '/dashboard/schedule' },
-    { icon: ClipboardCheck, label: 'Attendance', path: '/dashboard/attendance' },
-    { icon: BookOpen, label: 'Gradebook', path: '/dashboard/gradebook' },
-    { icon: FileText, label: 'Assignments', path: '/dashboard/assignments' },
-  ];
-
-  const studentNav = [
-    { icon: LayoutDashboard, label: 'Overview', path: '/dashboard' },
-    { icon: BarChart3, label: 'My Grades', path: '/dashboard/grades' },
-    { icon: Clock, label: 'Timetable', path: '/dashboard/timetable' },
-    { icon: Bell, label: 'Announcements', path: '/dashboard/announcements' },
-  ];
-
+  const adminNav = [{
+    icon: LayoutDashboard,
+    label: 'Overview',
+    path: '/dashboard'
+  }, {
+    icon: Users,
+    label: 'Students',
+    path: '/dashboard/students'
+  }, {
+    icon: UserCog,
+    label: 'Teachers',
+    path: '/dashboard/teachers'
+  }, {
+    icon: DollarSign,
+    label: 'Finances',
+    path: '/dashboard/finances'
+  }, {
+    icon: Bell,
+    label: 'Announcements',
+    path: '/dashboard/announcements'
+  }];
+  const teacherNav = [{
+    icon: LayoutDashboard,
+    label: 'Overview',
+    path: '/dashboard'
+  }, {
+    icon: Calendar,
+    label: 'My Schedule',
+    path: '/dashboard/schedule'
+  }, {
+    icon: ClipboardCheck,
+    label: 'Attendance',
+    path: '/dashboard/attendance'
+  }, {
+    icon: BookOpen,
+    label: 'Gradebook',
+    path: '/dashboard/gradebook'
+  }, {
+    icon: FileText,
+    label: 'Assignments',
+    path: '/dashboard/assignments'
+  }];
+  const studentNav = [{
+    icon: LayoutDashboard,
+    label: 'Overview',
+    path: '/dashboard'
+  }, {
+    icon: BarChart3,
+    label: 'My Grades',
+    path: '/dashboard/grades'
+  }, {
+    icon: Clock,
+    label: 'Timetable',
+    path: '/dashboard/timetable'
+  }, {
+    icon: Bell,
+    label: 'Announcements',
+    path: '/dashboard/announcements'
+  }];
   const navigation = role === 'admin' ? adminNav : role === 'teacher' ? teacherNav : studentNav;
-
   const roleLabel = role === 'admin' ? 'Administrator' : role === 'teacher' ? 'Teacher' : 'Student';
   const roleColor = role === 'admin' ? 'bg-primary' : role === 'teacher' ? 'bg-[hsl(var(--success))]' : 'bg-[hsl(var(--warning))]';
-
-  return (
-    <div className="min-h-screen bg-background flex">
+  return <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-foreground/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {sidebarOpen && <div className="fixed inset-0 bg-foreground/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
       {/* Sidebar */}
-      <aside className={cn(
-        "fixed lg:static inset-y-0 left-0 z-50 w-64 bg-sidebar text-sidebar-foreground flex flex-col transition-transform duration-300",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-      )}>
+      <aside className={cn("fixed lg:static inset-y-0 left-0 z-50 w-64 bg-sidebar text-sidebar-foreground flex flex-col transition-transform duration-300", sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0")}>
         {/* Logo */}
         <div className="p-4 border-b border-sidebar-border">
           <div className="flex items-center gap-3">
@@ -88,7 +98,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <GraduationCap className="h-6 w-6 text-sidebar-primary-foreground" />
             </div>
             <div>
-              <h1 className="font-bold text-lg">EduManage</h1>
+              <h1 className="font-bold text-lg text-primary-foreground">EduManage</h1>
               <span className={cn("text-xs px-2 py-0.5 rounded-full text-primary-foreground", roleColor)}>
                 {roleLabel}
               </span>
@@ -98,27 +108,16 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1">
-          {navigation.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <button
-                key={item.path}
-                onClick={() => {
-                  navigate(item.path);
-                  setSidebarOpen(false);
-                }}
-                className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                  isActive 
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground" 
-                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
-                )}
-              >
+          {navigation.map(item => {
+          const isActive = location.pathname === item.path;
+          return <button key={item.path} onClick={() => {
+            navigate(item.path);
+            setSidebarOpen(false);
+          }} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors", isActive ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground")}>
                 <item.icon className="h-5 w-5" />
                 {item.label}
-              </button>
-            );
-          })}
+              </button>;
+        })}
         </nav>
 
         {/* User section */}
@@ -134,11 +133,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <p className="text-xs text-sidebar-foreground/60 truncate">{roleLabel}</p>
             </div>
           </div>
-          <Button 
-            variant="ghost" 
-            className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-            onClick={handleLogout}
-          >
+          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>
@@ -149,12 +144,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
         <header className="h-16 bg-card border-b border-border flex items-center px-4 gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
           <div className="flex-1" />
@@ -171,8 +161,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </main>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DashboardLayout;
