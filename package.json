@@ -1,8 +1,33 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "eduflow-suite",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A comprehensive, full-stack school management system built with modern web technologies",
+  "author": "EduFlow Suite Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Muqtabis/eduflow-suite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Muqtabis/eduflow-suite/issues"
+  },
+  "homepage": "https://github.com/Muqtabis/eduflow-suite#readme",
+  "keywords": [
+    "education",
+    "school-management",
+    "student-management",
+    "react",
+    "typescript",
+    "vite",
+    "supabase",
+    "tailwindcss"
+  ],
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
