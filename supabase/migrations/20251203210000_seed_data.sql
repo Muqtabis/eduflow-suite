@@ -88,7 +88,8 @@ DECLARE
   random_status TEXT;
 BEGIN
   FOR student_rec IN SELECT id FROM public.students LOOP
-    random_status := fee_statuses[1 + floor(random() * 3)::int];
+    -- Safely get random status (1-based array indexing, so 1, 2, or 3)
+    random_status := fee_statuses[(floor(random() * 3)::int) + 1];
     
     INSERT INTO public.fees (student_id, amount, description, due_date, paid_date, status) VALUES
       (
