@@ -523,11 +523,54 @@ npm run dev
 ```
 
 ### Reset Database (DANGER - Deletes all data!)
-```sql
--- In Supabase SQL Editor
--- Run migrations again from scratch
--- DO NOT do this in production!
+
+**⚠️ WARNING: This will DELETE ALL DATA in your database! Only do this in development, NEVER in production!**
+
+If you need to completely reset your database and start fresh:
+
+#### Option 1: Using Supabase Dashboard (Safest)
+
+1. **Backup important data first** (if any)
+2. Go to Supabase Dashboard → Database → Tables
+3. For each table, click the table → Delete table
+4. Or, go to SQL Editor and run:
+   ```sql
+   -- Drop all tables (will fail if foreign key constraints exist)
+   DROP TABLE IF EXISTS public.announcements CASCADE;
+   DROP TABLE IF EXISTS public.assignments CASCADE;
+   DROP TABLE IF EXISTS public.fees CASCADE;
+   DROP TABLE IF EXISTS public.attendance CASCADE;
+   DROP TABLE IF EXISTS public.grades CASCADE;
+   DROP TABLE IF EXISTS public.classes CASCADE;
+   DROP TABLE IF EXISTS public.teachers CASCADE;
+   DROP TABLE IF EXISTS public.students CASCADE;
+   DROP TABLE IF EXISTS public.user_roles CASCADE;
+   DROP TABLE IF EXISTS public.profiles CASCADE;
+   DROP TYPE IF EXISTS public.app_role CASCADE;
+   ```
+5. Re-run all migrations in order (see [PROJECT_SETUP.md](./PROJECT_SETUP.md))
+
+#### Option 2: Create New Supabase Project (Cleanest)
+
+1. Create a new Supabase project
+2. Update `.env` with new credentials
+3. Run migrations from scratch
+4. Start fresh with clean database
+
+#### Option 3: Using Supabase CLI
+
+```bash
+# Reset the database (requires confirmation)
+supabase db reset
+
+# Then push migrations again
+supabase db push
 ```
+
+**Remember**: After reset, you'll need to:
+1. Re-run all migrations
+2. Re-create user accounts
+3. Re-populate with data (run seed migration or add manually)
 
 ### Check Service Status
 - Supabase: https://status.supabase.com/

@@ -111,17 +111,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const redirectUrl = `${window.location.origin}/`;
       
-      // First, check if user already exists
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('email', email)
-        .maybeSingle();
-      
-      if (existingUser) {
-        return { error: new Error('This email is already registered. Please sign in instead.') };
-      }
-      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -135,7 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) {
         // Provide more user-friendly error messages
-        if (error.message.includes('already registered')) {
+        if (error.message.includes('already registered') || error.message.includes('already been registered')) {
           return { error: new Error('This email is already registered. Please sign in instead.') };
         } else if (error.message.includes('Password')) {
           return { error: new Error('Password must be at least 6 characters long.') };
