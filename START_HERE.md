@@ -17,8 +17,11 @@ npm install
 cp .env.example .env
 
 # Open .env and add your Supabase credentials
-# See CREDENTIALS.md for detailed instructions
 ```
+
+**→ See [WHERE_TO_ADD_CREDENTIALS.md](./WHERE_TO_ADD_CREDENTIALS.md)** for exact instructions
+
+**→ See [CREDENTIALS.md](./CREDENTIALS.md)** for how to get your Supabase credentials
 
 ### 3. Setup Database
 - Go to your Supabase project dashboard

@@ -46,13 +46,19 @@ npm install
 ```
 
 ### 2️⃣ Setup Credentials
-**→ See [CREDENTIALS.md](./CREDENTIALS.md)** for step-by-step instructions
+**→ See [WHERE_TO_ADD_CREDENTIALS.md](./WHERE_TO_ADD_CREDENTIALS.md)** for exact location
 
-Quick summary:
-1. Create a free Supabase account at https://supabase.com
-2. Create a new project and get your API credentials
-3. **Copy `.env.example` to `.env`**: `cp .env.example .env`
-4. Edit `.env` and add your actual Supabase credentials
+**Quick version:**
+```bash
+# 1. Copy the template
+cp .env.example .env
+
+# 2. Get your Supabase credentials from https://supabase.com
+# 3. Open .env and replace the placeholder values
+# 4. Save the file
+```
+
+Detailed guide: [CREDENTIALS.md](./CREDENTIALS.md)
 
 ### 3️⃣ Setup Database
 Run the SQL migrations in your Supabase dashboard (see [SETUP.md](./SETUP.md))
