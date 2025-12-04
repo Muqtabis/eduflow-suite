@@ -26,9 +26,9 @@ if command -v node &> /dev/null; then
     NODE_VERSION=$(node -v)
     echo -e "${GREEN}✓${NC} Node.js installed: $NODE_VERSION"
     
-    # Extract major version
-    MAJOR_VERSION=$(echo $NODE_VERSION | cut -d'.' -f1 | sed 's/v//')
-    if [ "$MAJOR_VERSION" -lt 18 ]; then
+    # Extract major version (with error handling)
+    MAJOR_VERSION=$(echo $NODE_VERSION | cut -d'.' -f1 | sed 's/v//' | grep -E '^[0-9]+$' || echo "0")
+    if [ "$MAJOR_VERSION" -lt 18 ] 2>/dev/null; then
         echo -e "${RED}✗${NC} Node.js version should be 18 or higher"
         echo "  Current: $NODE_VERSION"
         echo "  Please upgrade Node.js: https://nodejs.org/"
@@ -57,10 +57,16 @@ echo "🔑 Checking environment configuration..."
 if [ -f ".env" ]; then
     echo -e "${GREEN}✓${NC} .env file exists"
     
-    # Check if it contains placeholder values
+    # Check if it contains placeholder values or missing project ID format
     if grep -q "your_project_id_here" .env || grep -q "your_publishable_key_here" .env; then
         echo -e "${YELLOW}⚠${NC} .env file contains placeholder values"
         echo "  Please add your actual Supabase credentials"
+        echo "  See: CREDENTIALS.md for detailed instructions"
+        SETUP_COMPLETE=false
+    # Also check for basic credential format (Project ID should not be a URL or too short)
+    elif ! grep -E 'VITE_SUPABASE_PROJECT_ID=".{15,}"' .env > /dev/null 2>&1; then
+        echo -e "${YELLOW}⚠${NC} Project ID in .env appears incomplete"
+        echo "  Please verify your Supabase credentials"
         echo "  See: CREDENTIALS.md for detailed instructions"
         SETUP_COMPLETE=false
     else
@@ -81,11 +87,31 @@ echo -e "${YELLOW}ℹ${NC} Database migrations must be run manually in Supabase"
 echo "  1. Go to your Supabase project dashboard"
 echo "  2. Open SQL Editor"
 echo "  3. Run migrations in order (see CREDENTIALS.md)"
-echo "  Files:"
-echo "    - supabase/migrations/20251203200917_*.sql"
-echo "    - supabase/migrations/20251203200954_*.sql"
-echo "    - supabase/migrations/20251204000000_*.sql (CRITICAL!)"
-echo "    - supabase/migrations/20251203210000_*.sql (optional)"
+echo "  Files in supabase/migrations/ (run in alphabetical order):"
+
+# Dynamically list migration files
+if [ -d "supabase/migrations" ]; then
+    MIGRATION_COUNT=0
+    for migration in supabase/migrations/*.sql; do
+        if [ -f "$migration" ]; then
+            MIGRATION_COUNT=$((MIGRATION_COUNT + 1))
+            filename=$(basename "$migration")
+            if [[ "$filename" == *"fix_auth_signup"* ]]; then
+                echo "    $MIGRATION_COUNT. $filename (CRITICAL!)"
+            elif [[ "$filename" == *"seed_data"* ]]; then
+                echo "    $MIGRATION_COUNT. $filename (optional - sample data)"
+            else
+                echo "    $MIGRATION_COUNT. $filename"
+            fi
+        fi
+    done
+    
+    if [ $MIGRATION_COUNT -eq 0 ]; then
+        echo -e "    ${RED}⚠ No migration files found!${NC}"
+    fi
+else
+    echo -e "    ${RED}⚠ supabase/migrations/ directory not found!${NC}"
+fi
 echo ""
 
 # Summary
